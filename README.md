@@ -1,0 +1,2 @@
+# MyStupidLang
+Just trying
