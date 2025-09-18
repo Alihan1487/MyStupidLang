@@ -212,7 +212,14 @@ static Dynamic if_(string args,string block,map<string,Dynamic>& namespac,Interp
 
     return Dynamic(nullptr);
 }
-
+  static Dynamic function_definition(string args,string block,map<string,Dynamic>& namespac,Interpreter* self){
+    map<string,Dynamic> locals;
+    auto ars=cut(args,',');
+    for (auto elem:ars){
+      auto el=cut(elem,' ');
+      locals[el[0]]=self->execline(el[1]);
+    }
+  }
   Dynamic callcom(string cmd,map<string,Dynamic>& namespac){
     vector<string> cmm=split(cmd,' ');
     for (int i=0;i<cmm.size();i++){
@@ -238,7 +245,6 @@ static Dynamic if_(string args,string block,map<string,Dynamic>& namespac,Interp
         return __comms[cmm[i]](args,namespac,this);
       }
     if (__operators.find(cmm[i])!=__operators.end()){
-      cout<<"FOUND\n";
       bool operpart=false;
       int dep=0;
       string args;
@@ -256,7 +262,6 @@ static Dynamic if_(string args,string block,map<string,Dynamic>& namespac,Interp
         }
         else if(k=="}"){
           dep-=1;
-          cout<<dep<<endl;
           if (dep==0){
             operpart=false;
             break;
@@ -328,8 +333,8 @@ int main() {
   cout<<"WHY\n";
   g.callcom("OUT ( \"kokos\" )",g.vars);
   g.callcom("SET ( a 90 )",g.vars);
-  cout<<"\n";
+  cout<<"new";
   g.callcom("OUT ( a )",g.vars);
   cout<<"\n";
-  g.callcom("IF 8==9 { OUT ( \"lol\" ) }",g.vars);
+  g.callcom("IF 9==9 { OUT ( \"lol\" ) }",g.vars);
 }
