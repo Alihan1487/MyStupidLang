@@ -2,6 +2,8 @@
 #include <iostream>
 #include <vector>
 #include <functional>
+#include <map>
+#include <variant>
 using namespace std;
 typedef struct Basic{
   void* data;
@@ -28,7 +30,9 @@ class Dynamic{
     }
 };
 typedef struct Function:Basic{
-function<Dynamic(vector<Dynamic>)> func;
+  variant<function<Dynamic(vector<Dynamic>)>,function<Dynamic(string,map<string,Dynamic>&)>> func
+  Function(function<Dynamic(vector<Dynamic>)> funct){func=funct}
+  Function(function<Dynamic(string,map<string,Dynamic>&)> funct){func=funct}
   Dynamic call(vector<Dynamic>& args){
     return func(args);
   }

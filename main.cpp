@@ -213,12 +213,8 @@ static Dynamic if_(string args,string block,map<string,Dynamic>& namespac,Interp
     return Dynamic(nullptr);
 }
   static Dynamic function_definition(string args,string block,map<string,Dynamic>& namespac,Interpreter* self){
-    map<string,Dynamic> locals;
-    auto ars=cut(args,',');
-    for (auto elem:ars){
-      auto el=cut(elem,' ');
-      locals[el[0]]=self->execline(el[1]);
-    }
+    auto ars=split(args,' ');
+    namespac[ars[0]]=Dynamic(new Function([=](string args,map<string,Dynamic>& namespac){return self->execline(block,namespac);}));
   }
   Dynamic callcom(string cmd,map<string,Dynamic>& namespac){
     vector<string> cmm=split(cmd,' ');
