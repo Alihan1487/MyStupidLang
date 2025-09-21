@@ -30,16 +30,15 @@ class Dynamic{
     }
 };
 typedef struct Function:Basic{
-  variant<function<Dynamic(vector<Dynamic>)>,function<Dynamic(string,map<string,Dynamic>&)>> func
-  Function(function<Dynamic(vector<Dynamic>)> funct){func=funct}
-  Function(function<Dynamic(string,map<string,Dynamic>&)> funct){func=funct}
-  Dynamic call(vector<Dynamic>& args){
-    return func(args);
+  function<Dynamic(string,map<string,Dynamic>&)> func;
+  Function(function<Dynamic(string,map<string,Dynamic>&)> func){this->func=func;}
+  Dynamic call(string args,map<string,Dynamic>& namespac){
+    return func(args,namespac);
   }
   void print(ostream& os){
     os<<"Thats function bruuuuh";
     }
-function<Dynamic(vector<Dynamic>)> get(){return func;}
+function<Dynamic(string,map<string,Dynamic>&)> get(){return func;}
 } FunctionObject;
 typedef struct Int:Basic{
   int data;
