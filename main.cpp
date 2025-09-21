@@ -214,7 +214,18 @@ static Dynamic if_(string args,string block,map<string,Dynamic>& namespac,Interp
 }
   static Dynamic function_definition(string args,string block,map<string,Dynamic>& namespac,Interpreter* self){
     auto ars=split(args,' ');
-    namespac[ars[0]]=Dynamic(new Function(function<Dynamic(string,map<string,Dynamic>&)>([=](string args,map<string,Dynamic>& namespac){return self->execline(block,namespac);})));
+    auto argsnames=split(args,' ');
+    namespac[ars[0]]=Dynamic(new Function(function<Dynamic(string,map<string,Dynamic>&)>([=](string args,map<string,Dynamic>& namespac){
+      static auto argsnamesinner=argsnames;
+      auto argvals=split(args,' ');
+      map<string,Dynamic> locals;
+      for (auto i:argsnamesinner){
+        for (auto j:split(args,',')){
+          locals[i]=self->execline(j,namespac);
+        }
+      }
+      return self->execline(block,locals);
+    })));
     return Dynamic(nullptr);
   }
   Dynamic callcom(string cmd,map<string,Dynamic>& namespac){
